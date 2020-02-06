@@ -85,7 +85,7 @@ def test_lcs(df, lcs_word):
     # get answer file text
     answer_text = df.loc[test_index, 'Text'] 
     
-    # get text for orig file
+    # get text for orig fileW
     # find the associated task type (one character, a-e)
     task = df.loc[test_index, 'Task']
     # we know that source texts have Class = -1

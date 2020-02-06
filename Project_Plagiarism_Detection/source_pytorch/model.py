@@ -17,7 +17,7 @@ class BinaryClassifier(nn.Module):
 
     ## TODO: Define the init function, the input params are required (for loading code in train.py to work)
     def __init__(self, input_features, hidden_dim, output_dim):
-        """
+        """s
         Initialize the model by setting up linear layers.
         Use the input parameters to help define the layers of your model.
         :param input_features: the number of input features in your training/test data
@@ -25,10 +25,22 @@ class BinaryClassifier(nn.Module):
         :param output_dim: the number of outputs you want to produce
         """
         super(BinaryClassifier, self).__init__()
+        
+        self.input_features = input_features
+        self.hidden_dim = hidden_dim
+        self.output_dim = output_dim
+        self.dropout_rate = 0.3
 
         # define any initial layers, here
         
-
+        self.norm_feat = nn.BatchNorm1d(self.input_features)
+        
+        self.norm_feat_to_hidden = nn.Linear(self.input_features, self.hidden_dim)
+        
+        self.dropout = nn.Dropout(self.dropout_rate)
+        
+        self.hidden_to_logits = nn.Linear(self.hidden_dim, self.output_dim)
+        
     
     ## TODO: Define the feedforward behavior of the network
     def forward(self, x):
@@ -40,5 +52,12 @@ class BinaryClassifier(nn.Module):
         
         # define the feedforward behavior
         
-        return x
+        n = self.norm_feat(x)
+        h = self.norm_feat_to_hidden(n)
+        relu = F.relu(h)
+        d = self.dropout(relu)
+        l = self.hidden_to_logits(d)
+        s = F.sigmoid(l)
+        
+        return s
     
